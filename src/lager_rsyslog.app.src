@@ -1,0 +1,10 @@
+{application, lager_rsyslog, [
+    {description, "Rsyslog backend for Lager"},
+    {vsn, git},
+    {modules, []},
+    {applications, [
+        kernel,
+        stdlib
+    ]},
+    {registered, []}
+]}.
