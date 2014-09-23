@@ -101,12 +101,12 @@ mask(Config) ->
     case lists:keyfind(level, 1, Config) of
         {level, Level} ->
             try
-                lager_util:mask_from_config(Level)
+                lager_util:config_to_mask(Level)
             catch _:_ ->
-                lager_util:mask_from_config(info)
+                lager_util:config_to_mask(info)
             end;
         false ->
-            lager_util:mask_from_config(info)
+            lager_util:config_to_mask(info)
     end.
 
 
