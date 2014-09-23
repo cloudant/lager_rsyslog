@@ -89,7 +89,12 @@ facility_int(local3)   -> (19 bsl 3);
 facility_int(local4)   -> (20 bsl 3);
 facility_int(local5)   -> (21 bsl 3);
 facility_int(local6)   -> (22 bsl 3);
-facility_int(local7)   -> (23 bsl 3).
+facility_int(local7)   -> (23 bsl 3);
+
+facility_int(Facility) when is_list(Facility) ->
+    facility_int(list_to_existing_atom(Facility));
+facility_int(Facility) when is_binary(Facility) ->
+    facility_int(list_to_existing_atom(binary_to_list(Facility))).
 
 
 mask(Config) ->
