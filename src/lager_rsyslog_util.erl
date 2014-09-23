@@ -130,8 +130,8 @@ level(_BadLevel) ->
 
 formatter(Config) ->
     case lists:keyfind(formatter, 1, Config) of
-        {formatter, {Mod, Config}} when is_atom(Mod) ->
-            {Mod, Config};
+        {formatter, {Mod, FmtCfg}} when is_atom(Mod) ->
+            {Mod, FmtCfg};
         false ->
             ?DEFAULT_FORMATTER
     end.
