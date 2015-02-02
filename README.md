@@ -28,7 +28,7 @@ You can refer to the [Lager documentation][lager_levels] for using a syslog styl
 
 An example for Apache CouchDB might look something like this:
 
-    {handles, [
+    {handlers, [
         {lager_rsyslog_backend, [
             {identity, "couchdb"},
             {facility, local2},
