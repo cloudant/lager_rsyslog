@@ -88,9 +88,12 @@ handle_event({log, Message}, St) ->
         true ->
             LagerLevel = lager_msg:severity(Message),
             RsyslogLevel = lager_rsyslog_util:level(LagerLevel),
+            Metadata = lager_msg:metadata(Message),
+            MetaFacility = proplists:get_value(facility, Metadata),
+            RsyslogFacility = lager_rsyslog_util:facility_int(MetaFacility),
             {FmtMod, FmtCfg} = St#st.formatter,
             MsgStr = [FmtMod:format(Message, FmtCfg)],
-            send_log(St, RsyslogLevel, MsgStr),
+            send_log(St, RsyslogLevel, RsyslogFacility, MsgStr),
             {ok, St};
         false ->
             {ok, St}
@@ -108,9 +111,11 @@ code_change(_OldVsn, St, _Extra) ->
     {ok, St}.
 
 
-send_log(St, Level, Msg) ->
+send_log(St, Level, undefined, Msg) ->
+    send_log(St, Level, St#st.facility, Msg);
+send_log(St, Level, Facility, Msg) ->
     Pre = io_lib:format("<~B>~B ~s ~s ~s ", [
-        St#st.facility bor Level,
+        Facility bor Level,
         ?SYSLOG_VERSION,
         lager_rsyslog_util:iso8601_timestamp(),
         St#st.hostname,
