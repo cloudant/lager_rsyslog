@@ -28,20 +28,26 @@
 
 -include("lager_rsyslog.hrl").
 
+-define(DEFAULT_DEST_ADDR, {127,0,0,1}).
 
 dest_addr(Config) ->
     case lists:keyfind(host, 1, Config) of
         {host, Host} ->
-            case inet:getaddr(Host, inet) of
-                {ok, Address} ->
-                    Address;
-                _ ->
-                   {127, 0, 0, 1} 
-            end;
+            addr(Host);
         false ->
-            {127, 0, 0, 1}
+            addr(application:get_env(lager_rsyslog, host))
     end.
 
+addr(undefined) ->
+    ?DEFAULT_DEST_ADDR;
+addr(Host) ->
+    case inet:getaddr(Host, inet) of
+        {ok, Address} ->
+            Address;
+        _ ->
+            ?DEFAULT_DEST_ADDR
+    end.
+    
 
 dest_port(Config) ->
     case lists:keyfind(port, 1, Config) of
